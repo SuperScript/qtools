@@ -1,24 +1,21 @@
-%& sstdoc
-\banner{qtools}
+\documentclass{book}
+\usepackage{sstdef}
+\title{checkdomain}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{The \cmd{checkdomain} program}
+\section{The \cmd{checkdomain} program}
 
-\section{Interface}
-\begin{code}
-  checkdomain \arg{dom} ...
+\subsection{Interface}
+\begin{code}%
+  checkdomain \var{dom} ...
 \end{code}
-where \carg{addr} is an email header name.
+where \cvar{addr} is an email header name.
 
 \cmd{checkdomain} reads email addresses from standard input,
-and compares the domain portion with each \carg{dom}
+and compares the domain portion with each \cvar{dom}
 without regard to case.
-If no \carg{addr} appears, \cmd{checkdomain} uses the domain
+If no \cvar{addr} appears, \cmd{checkdomain} uses the domain
 part of the environment variable \cmd{\$RECIPIENT}
-as \carg{dom}.  If it finds a match, \cmd{checkdomain} exits 0.
+as \cvar{dom}.  If it finds a match, \cmd{checkdomain} exits 0.
 Otherwise, \cmd{checkdomain} exits 100.
 
 \cmd{checkdomain} reads addresses in the form output by 
@@ -30,6 +27,6 @@ The introductory characters are not part of the address.
 \cmd{checkdomain} compares its arguments only with delivery
 addresses, and ignores comments.
 
-If \cmd{checkdomain} finds an address matching \carg{dom}, it exits 0.
+If \cmd{checkdomain} finds an address matching \cvar{dom}, it exits 0.
 Otherwise, \cmd{checkdomain} exits 100.
 \end{document}

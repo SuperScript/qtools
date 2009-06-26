@@ -1,26 +1,23 @@
-%& sstdoc
-\banner{qtools}
+\documentclass{book}
+\usepackage{sstdef}
+\title{condtomaildir}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{The \cmd{condtomaildir} program}
+\section{The \cmd{condtomaildir} program}
 
-\section{Interface}
+\subsection{Interface}
 In \cmd{.qmail}:
-\begin{code}
-  | condtomaildir \arg{dir} \arg{prog}
+\begin{code}%
+  | condtomaildir \var{dir} \var{prog}
 \end{code}
-where \carg{dir} is a Maildir-format directory and \carg{prog} is one
+where \cvar{dir} is a Maildir-format directory and \cvar{prog} is one
 or more arguments specifying a program to run for each message.
 
 For each email message it processes, \cmd{condtomaildir} runs
-\carg{prog} with the message on standard input.  If \carg{prog} exits
-0, \cmd{condtomaildir} writes the email message to \carg{dir}, and
+\cvar{prog} with the message on standard input.  If \cvar{prog} exits
+0, \cmd{condtomaildir} writes the email message to \cvar{dir}, and
 then exits 99, so that further commands in \cmd{.qmail} are ignored.
-If \carg{prog} exits 111, \cmd{condtomaildir} exits 111, so delivery
-is retried later. If \carg{prog} exits anything else, or does not
+If \cvar{prog} exits 111, \cmd{condtomaildir} exits 111, so delivery
+is retried later. If \cvar{prog} exits anything else, or does not
 exist, \cmd{condtomaildir} exits 0, so the rest of \cmd{.qmail} is
 processed.
 
@@ -30,6 +27,6 @@ error in handling a message, \cmd{condtomaildir} exits 111.
 
 
 If \cmd{condtomaildir} encounters a permanent error attempting to run
-\carg{prog}, it exits 100.  If \cmd{condtomaildir} encounters a
-temporary error in attempting to run \carg{prog}, it exits 111.
+\cvar{prog}, it exits 100.  If \cmd{condtomaildir} encounters a
+temporary error in attempting to run \cvar{prog}, it exits 111.
 \end{document}

@@ -1,26 +1,24 @@
+\documentclass{book}
+\usepackage{sstdef}
 %& sstdoc
-\banner{qtools}
+\title{822headerfilter}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{The \cmd{822headerfilter} program}
+\section{The \cmd{822headerfilter} program}
 
-\section{Interface}
-\begin{code}
-  822headerfilter \arg{prog}
+\subsection{Interface}
+\begin{code}%
+  822headerfilter \var{prog}
 \end{code}
-where \carg{prog} is one or more arguments specifying a program to
+where \cvar{prog} is one or more arguments specifying a program to
 run.
 
 \cmd{822headerfilter} reads an 822-format email message from standard
-input.  It executes \carg{prog} with the header of the message on
+input.  It executes \cvar{prog} with the header of the message on
 standard input.  If it encounters a permanent error in reading input
-or executing \carg{prog}, \cmd{822headerfilter} exits 100.  If it
+or executing \cvar{prog}, \cmd{822headerfilter} exits 100.  If it
 encounters a temporary error in reading input or executing
-\carg{prog}, \cmd{822headerfilter} exits 111.  Otherwise,
-\cmd{822headerfilter} yields the same exit code as \carg{prog}.
+\cvar{prog}, \cmd{822headerfilter} exits 111.  Otherwise,
+\cmd{822headerfilter} yields the same exit code as \cvar{prog}.
 
 \cmd{822headerfilter} considers the end of the message or the first
 line that cannot be part of an 822-format header field to terminate

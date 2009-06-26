@@ -1,32 +1,29 @@
-%& sstdoc
-\banner{qtools}
+\documentclass{book}
+\usepackage{sstdef}
+\title{filterto}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{The \cmd{filterto} program}
+\section{The \cmd{filterto} program}
 
-\section{Interface}
+\subsection{Interface}
 In \cmd{.qmail}:
-\begin{code}
-  | filterto \arg{address} \arg{prog}
+\begin{code}%
+  | filterto \var{address} \var{prog}
 \end{code}
-where \carg{address} is an email address, and \carg{prog} is one or
+where \cvar{address} is an email address, and \cvar{prog} is one or
 more arguments specifying a program to run for each message.
 
-For each email message it processes, \cmd{filterto} runs \carg{prog}
-with the message on standard input.  If \carg{prog} exits 0,
-\cmd{filterto} forwards the standard output from \carg{prog} to
-\carg{address}, and then exits 99, so that further commands in
-\cmd{.qmail} are ignored.  If \carg{prog} exits 111, \cmd{filterto}
-exits 111, so delivery will be retried later.  If \carg{prog} exits
+For each email message it processes, \cmd{filterto} runs \cvar{prog}
+with the message on standard input.  If \cvar{prog} exits 0,
+\cmd{filterto} forwards the standard output from \cvar{prog} to
+\cvar{address}, and then exits 99, so that further commands in
+\cmd{.qmail} are ignored.  If \cvar{prog} exits 111, \cmd{filterto}
+exits 111, so delivery will be retried later.  If \cvar{prog} exits
 with any other exit code, or does not exist, \cmd{filterto} exits 0,
 so the rest of \cmd{.qmail} is processed.
 
-Note that it is not safe for \carg{prog} to fork a child that reads
+Note that it is not safe for \cvar{prog} to fork a child that reads
 the message in the background.
 
-\bffont{NB}: If you use \cmd{filterto} in a \cmd{.qmail} file, make
+\textbf{NB}: If you use \cmd{filterto} in a \cmd{.qmail} file, make
 sure to add a line specifying delivery to your normal mailbox.
 \end{document}

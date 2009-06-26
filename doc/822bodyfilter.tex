@@ -1,28 +1,26 @@
+\documentclass{book}
+\usepackage{sstdef}
 %& sstdoc
-\banner{qtools}
+\title{822bodyfilter}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{The \cmd{822bodyfilter} program}
+\section{The \cmd{822bodyfilter} program}
 
-\section{Interface}
-\begin{code}
-  822bodyfilter \arg{prog}
+\subsection{Interface}
+\begin{code}%
+  822bodyfilter \var{prog}
 \end{code}
-where \carg{prog} is one or more arguments specifying a program to
+where \cvar{prog} is one or more arguments specifying a program to
 run.
 
 \cmd{822bodyfilter} reads an 822-format email message from standard
-input.  It executes \carg{prog} with the body of the message on
+input.  It executes \cvar{prog} with the body of the message on
 standard input, and prints the message headers followed by the output
-from \carg{prog} to standard output.
+from \cvar{prog} to standard output.
 
 If \cmd{822bodyfilter} encounters a temporary error in executing
-\carg{prog}, it exits 111.  If \cmd{822bodyfilter} encounters a
-permanent error in executing \carg{prog}, it exits 100.  Normally,
-\cmd{822bodyfilter} yields the same exit code as \carg{prog}.  The
+\cvar{prog}, it exits 111.  If \cmd{822bodyfilter} encounters a
+permanent error in executing \cvar{prog}, it exits 100.  Normally,
+\cmd{822bodyfilter} yields the same exit code as \cvar{prog}.  The
 standard input to \cmd{822bodyfilter} must be seekable.
 
 \cmd{822bodyfilter} considers the end of the message or the first line

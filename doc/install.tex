@@ -1,54 +1,51 @@
-%& sstdoc
-\banner{qtools}
+\documentclass{book}
+\usepackage{sstdef}
+\title{Install}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{How to install qtools}
+\section{How to install qtools}
 
 qtools comes with NO WARRANTY.
 
-\section{System requirements}
+\subsection{System requirements}
 qtools works only under UNIX systems that run qmail.  Additionally,
 email repliers configured with \cmd{replier-config} require
 \cmd{ezmlm-weed} from the \href{ezmlm}{http://cr.yp.to/ezmlm.html}
 package.
 
-\section{Installation}
+\subsection{Installation}
 
 Download the qtools package.  The most recent qtools package is
-\href{\version{qtools}}{\package{qtools}.tar.gz}.
+\href{\version}{\package-\version.tar.gz}.
 
 Unpack the qtools package:
-\begin{code}
-  gunzip \package{qtools}.tar
-  tar -xf \package{qtools}.tar
-  cd \package{qtools}
+\begin{code}%
+  gunzip \package-\version.tar
+  tar -xf \package-\version.tar
+  cd \package
 \end{code}
 
 Compile the qtools programs:
-\begin{code}
+\begin{code}%
   make
 \end{code}
 
 Run some tests.  Normally, this produces no output:
-\begin{code}
+\begin{code}%
   make test
 \end{code}
 If the tests fail, manually compare their output with the expected results:
-\begin{code}
-  ./rts \>rts.out
+\begin{code}%
+  ./rts \string> rts.out
   diff rts.out rts.exp
 \end{code}
 
 As root, install the qtools programs under \cmd{/usr/local}:
-\begin{code}
+\begin{code}%
   make setup check
 \end{code}
 
 Report successful installation:
-\begin{code}
+\begin{code}%
   ( echo 'First M. Last'; cat `cat SYSDEPS` ) \
   | mail web-inst@superscript.com
 \end{code}

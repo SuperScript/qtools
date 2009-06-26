@@ -2,11 +2,11 @@
 result="$4"
 
 case "$1" in
-  *c*) ./compile $2.c >/dev/null 2>&1 || result="$3" ;;
+  *c*) ./compile $2.o $2.c >/dev/null 2>&1 || result="$3" ;;
 esac
 
 case "$1" in
-  *l*) ./load $2 >/dev/null 2>&1 || result="$3" ;;
+  *l*) ./load $2 $2 >/dev/null 2>&1 || result="$3" ;;
 esac
 
 case "$1" in

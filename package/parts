@@ -1,0 +1,77 @@
+#!/bin/sh
+shout() { echo "parts: $@" >&2; }
+barf() { shout "fatal: $@"; exit 111; }
+#
+# Print the input programs that match parts named as command-line arguments.
+# Input lines have the form: progname part
+# where part is optional.  The empty part is the default part.
+# First argument is:
+#   target    Print program names.
+#   list      Print part names.
+# Other arguments are:
+#   -	      Deselect all parts.  Only print those named
+#   -part     Deselect named part.  Print default and other parts except this one.
+#   part      Select named part.  Print default and this part.
+#
+usage() { shout "usage: package/parts target|list [ [-]part ... ]"; exit 100; }
+[ $# -lt 1 ] && usage
+request="$1"
+shift
+case "$request" in
+  target|list)
+    ;;
+  *)
+    barf "unknown request: $request"
+    ;;
+esac
+exec awk '
+function flushlist(l, k) { for (k in l) delete l[i] }
+BEGIN {
+  all = 1
+  want[""] = 1
+
+  # skip request arg
+  if (ARGC > 2) {
+    for (i = 2;i < ARGC;++i) {
+      targ = ARGV[i]
+      if (targ == "-") {
+	all = 0
+	flushlist(want)
+      }
+      else if (targ == "+") {
+	all = 1
+	flushlist(want)
+      }
+      else if (targ ~ /^[+]/) {
+	all = 0
+	want[substr(targ,2)] = 1
+      }
+      else if (targ ~ /^-/) {
+	all = 1
+	want[substr(targ,2)] = -1
+      }
+      else {
+	all = 0
+	want[targ] = 1
+      }
+    }
+    # Preserve request arg
+    ARGC = 2
+  }
+}
+{
+  if (!$1) next
+
+  if (want[$2] < 0) next
+
+  if (request == "target") {
+    if (want[$2] == 1 || all) print $1
+  }
+  else {
+    if (seen[$2]) next
+    if (want[$2] == 1 || all) print $2
+    seen[$2] = 1
+  }
+  next;
+}
+' "request=$request" ${1+"$@"}

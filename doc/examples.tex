@@ -1,31 +1,28 @@
-%& sstdoc
-\banner{Examples}
+\documentclass{book}
+\usepackage{sstdef}
+\title{Examples}
 \begin{document}
-\image{../sstlogo.gif}{sstlogo}
-\parent{../superscript}{\SST}
-\parent{../software}{Software}
-\parent{intro}{qtools}
-\chapter{Examples}
+\section{Examples}
 \label{examples}
 
 
-\section{\cmd{.qmail} commands}
+\subsection{\cmd{.qmail} commands}
 Save messages to test@example.com:
-\begin{code}
+\begin{code}%
   | condtomaildir ./Test ifaddr to cc : test@example.com
 \end{code}
 
 Save messages to or from @example.com:
-\begin{code}
+\begin{code}%
   | condtomaildir ./Test ifaddr to cc from : @example.com
 \end{code}
 
 Save a message if it was addressed to \cmd{test@example.com}:
-\begin{code}
+\begin{code}%
   | condtomaildir ./Test iftocc test@example.com
 \end{code}
 
-\section{Email-based servers}
+\subsection{Email-based servers}
 This section provides several examples of email servers based on qtools.
 These are simple-minded servers, designed only to demonstrate methods
 of providing services, and not as examples of useful services.

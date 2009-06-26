@@ -1,0 +1,2 @@
+build_ifchanged auto-str conf-qmail
+./auto-str auto_qmail "`head -1 conf-qmail`"
