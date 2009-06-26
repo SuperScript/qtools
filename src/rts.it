@@ -1,0 +1,494 @@
+# Assumptions:
+
+# not tested:
+# read/write errors
+# filterto
+
+rm -fr 0
+
+mkdir 0
+
+RECIPIENT=another@example.com; export RECIPIENT
+RPLINE='Return-Path: <someone@example.com>
+'; export RPLINE
+DTLINE='Delivered-To: another@example.com
+'; export DTLINE
+
+cat <<EOF >0/msg.ok
+From: someone@example.com
+CC: somebody@example.com
+To: another@example.com
+Subject: strangeness@example.com
+
+body1
+body2
+body3
+EOF
+
+awk 'BEGIN { RS="\n"; ORS="\r\n"; } { print; }' <0/msg.ok >0/msg.cr
+sed -e '/^$/d' <0/msg.ok >0/msg.bad
+
+{
+  printf "%s" "\
+From: someone@example.com
+CC: somebody@example.com
+To: another@example.com
+Subject: strangeness@example.com"
+} > 0/msg.eof
+
+mkdir 0/Maildir
+mkdir 0/Maildir/new
+mkdir 0/Maildir/tmp
+
+
+# 822body
+
+echo '--- 822body handles well-formed message'
+./822body <./0/msg.ok; echo $?
+
+echo '--- 822body handles well-formed message'
+./822body <./0/msg.cr; echo $?
+
+echo '--- 822body handles ill-formed message'
+./822body <./0/msg.bad; echo $?
+
+echo '--- 822body handles header to EOF'
+./822body <./0/msg.eof; echo $?
+
+# 822headerok
+
+echo '--- 822headerok handles well-formed message'
+./822headerok <./0/msg.ok; echo $?
+
+echo '--- 822headerok handles well-formed message'
+./822headerok <./0/msg.cr; echo $?
+
+echo '--- 822headerok handles ill-formed message'
+./822headerok <./0/msg.bad; echo $?
+
+echo '--- 822headerok handles header to EOF'
+./822headerok <./0/msg.eof; echo $?
+
+
+# 822bodyfilter
+
+echo '--- 822bodyfilter handles well-formed message'
+./822bodyfilter cat -nv <./0/msg.ok; echo $?
+
+echo '--- 822bodyfilter handles well-formed message'
+./822bodyfilter cat -nv <./0/msg.cr; echo $?
+
+echo '--- 822bodyfilter handles ill-formed message'
+./822bodyfilter cat -nv <./0/msg.bad; echo $?
+
+echo '--- 822bodyfilter handles header to EOF'
+./822bodyfilter cat -nv <./0/msg.eof; echo $?
+
+
+# 822headerfilter
+
+echo '--- 822headerfilter handles well-formed message'
+./822headerfilter cat -nv <./0/msg.ok; echo $?
+
+echo '--- 822headerfilter handles well-formed message'
+./822headerfilter cat -nv <./0/msg.cr; echo $?
+
+echo '--- 822headerfilter handles ill-formed message'
+./822headerfilter cat -nv <./0/msg.bad; echo $?
+
+echo '--- 822headerfilter handles header to EOF'
+./822headerfilter cat -nv <./0/msg.eof; echo $?
+
+# tomaildir
+echo '--- tomaildir requires argument'
+rm -fr 0/Maildir/new/*
+./tomaildir <./0/msg.ok; echo $?
+test -f 0/Maildir/new/* && echo wrong
+
+echo '--- tomaildir adds proper headers'
+rm -fr 0/Maildir/new/*
+./tomaildir 0/Maildir <./0/msg.ok; echo $?
+cat 0/Maildir/new/*
+
+echo '--- tomaildir takes -l'
+rm -fr 0/Maildir/new/*
+./tomaildir -l 0/Maildir <./0/msg.ok; echo $?
+cat 0/Maildir/new/*
+
+# condtomaildir
+echo '--- condtomaildir requires argument'
+rm -fr 0/Maildir/new/*
+./condtomaildir 0/Maildir <./0/msg.ok; echo $?
+test -f 0/Maildir/new/* && echo wrong
+
+echo '--- condtomaildir handles nonexistent program'
+rm -fr 0/Maildir/new/*
+./condtomaildir 0/Maildir ./nonexistent <./0/msg.ok; echo $?
+test -f 0/Maildir/new/* && echo wrong
+
+echo '--- condtomaildir handles program permanent error'
+rm -fr 0/Maildir/new/*
+./condtomaildir 0/Maildir false <./0/msg.ok; echo $?
+test -f 0/Maildir/new/* && echo wrong
+
+echo '--- condtomaildir preserves exit 111'
+rm -fr 0/Maildir/new/*
+./condtomaildir 0/Maildir /bin/sh -c 'exit 111' <./0/msg.ok; echo $?
+test -f 0/Maildir/new/* && echo wrong
+
+echo '--- condtomaildir handles program success'
+rm -fr 0/Maildir/new/*
+./condtomaildir 0/Maildir true <./0/msg.ok; echo $?
+cat 0/Maildir/new/*
+
+# iftoccfrom
+
+echo '--- iftoccfrom uses RECIPIENT'
+./iftoccfrom <./0/msg.ok; echo $?
+
+echo '--- iftoccfrom handles To'
+./iftoccfrom another@example.com <./0/msg.ok; echo $?
+
+echo '--- iftoccfrom handles Cc'
+./iftoccfrom somebody@example.com <./0/msg.ok; echo $?
+
+echo '--- iftoccfrom handles From'
+./iftoccfrom someone@example.com <./0/msg.ok; echo $?
+
+echo '--- iftoccfrom handles well-formed message'
+./iftoccfrom somebody@example.com <./0/msg.ok; echo $?
+
+echo '--- iftoccfrom fails with CRLF'
+./iftoccfrom somebody@example.com <./0/msg.cr; echo $?
+
+echo '--- iftoccfrom handles ill-formed message'
+./iftoccfrom someone@example.com <./0/msg.bad; echo $?
+
+echo '--- iftoccfrom handles header to EOF'
+./iftoccfrom someone@example.com <./0/msg.eof; echo $?
+
+echo '--- iftoccfrom handles multiple addresses'
+./iftoccfrom nonsense@example.com someone@example.com <./0/msg.eof; echo $?
+
+
+# 822headers
+
+echo '--- 822headers works'
+./822headers to subject nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822headers works with no matches'
+./822headers nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822headers uses subject'
+./822headers <./0/msg.ok; echo $?
+
+echo '--- 822headers handles ill-formed message'
+./822headers to subject nonexistent <./0/msg.bad; echo $?
+
+echo '--- 822headers handles header to EOF'
+./822headers to subject nonexistent <./0/msg.eof; echo $?
+
+
+# 822fields
+
+echo '--- 822fields works'
+./822fields to subject nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822fields works with no matches'
+./822fields nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822fields uses subject'
+./822fields <./0/msg.ok; echo $?
+
+echo '--- 822fields handles ill-formed message'
+./822fields to subject nonexistent <./0/msg.bad; echo $?
+
+echo '--- 822fields handles header to EOF'
+./822fields to subject nonexistent <./0/msg.eof; echo $?
+
+echo '--- 822fields requires exact header match'
+./822fields subjects <./0/msg.eof; echo $?
+
+
+# 822addr
+
+echo '--- 822addr works'
+./822addr to from nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822addr works with no matches'
+./822addr nonexistent <./0/msg.ok; echo $?
+
+echo '--- 822addr uses RECIPIENT'
+./822addr <./0/msg.ok; echo $?
+
+echo '--- 822addr handles ill-formed message'
+./822addr to subject nonexistent <./0/msg.bad; echo $?
+
+echo '--- 822addr handles header to EOF'
+./822addr to subject nonexistent <./0/msg.eof; echo $?
+
+cat <<EOF >0/msg.addr
+From: someone@example.com (someone)
+CC: somebody@example.com (somebody)
+To: another@example.com (another)
+Subject: strangeness@example.com
+
+body1
+body2
+body3
+EOF
+
+echo '--- 822addr handles comments'
+./822addr to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -d prints only delivery address'
+./822addr -cd to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -dn prints only delivery address with newline'
+./822addr -cdn to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -c prints only comment address'
+./822addr -dc to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -cn prints only comment address with newline'
+./822addr -dcn to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -a prints all addresses'
+./822addr -dca to cc from nonexistent <./0/msg.addr; echo $?
+
+echo '--- 822addr -an prints all addresses with newline'
+./822addr -dcan to cc from nonexistent <./0/msg.addr; echo $?
+
+
+# checkaddr
+
+echo '--- checkaddr works'
+./822addr to cc from <./0/msg.addr \
+  | ./checkaddr nonesuch@example.com someone@example.com; echo $?
+
+echo '--- checkaddr uses RECIPIENT'
+./822addr to <./0/msg.addr | ./checkaddr; echo $?
+
+echo '--- checkaddr works with no match'
+./822addr nonesuch <./0/msg.addr | ./checkaddr; echo $?
+
+
+# checkdomain
+
+echo '--- checkdomain works'
+./822addr to cc from <./0/msg.addr \
+  | ./checkdomain test.com example.com; echo $?
+
+echo '--- checkdomain uses RECIPIENT'
+./822addr to <./0/msg.addr | ./checkdomain; echo $?
+
+echo '--- checkdomain works with no match'
+./822addr to cc from <./0/msg.addr | ./checkdomain ""; echo $?
+
+
+# ifaddr
+
+echo '--- ifaddr uses RECIPIENT'
+./ifaddr < ./0/msg.addr; echo $?
+./ifaddr to subject : < ./0/msg.addr; echo $?
+
+echo '--- ifaddr works without fields'
+./ifaddr another@example.com < ./0/msg.addr; echo $?
+./ifaddr : somebody@example.com < ./0/msg.addr; echo $?
+
+echo '--- ifaddr works with fields'
+./ifaddr to subject : strangeness@example.com < ./0/msg.addr; echo $?
+./ifaddr to subject : nonsense@example.com < ./0/msg.addr; echo $?
+
+echo '--- ifaddr works with domain'
+./ifaddr @example.com < ./0/msg.addr; echo $?
+./ifaddr subject : @example.com < ./0/msg.addr; echo $?
+./ifaddr @nonsense.com < ./0/msg.addr; echo $?
+
+rm -fr 0
+
+
+## addrrules
+#
+#echo '--- addrrules  requires two arguments'
+#addrrules a
+#echo $?
+#
+#echo '--- addrrules works'
+#echo "\
+## this is a comment and should be ignored
+#@:superscript.COM:exec,ADDRESS='@superscript.COM'
+#=:WEB@superscript.com:exec,ADDRESS='=WEB@superscript.com'
+#+:web-@superscript.com:exec,ADDRESS='+web-@superscript.com'
+#+:web-fail-@superscript.com:fail,ADDRESS='nada'
+#+:web-minus-@superscript.com:exec,ADDRESS='+web-minus-@superscript.com'
+#+:WEB-plus+@superscript.com:exec,ADDRESS='+WEB-plus+@superscript.com'
+#+:WEB-kill-@superscript.com:kill,ADDRESS='+WEB-kill-@superscript.com'
+#+:WEB-defer-@superscript.com:defer,ADDRESS='+WEB-defer-@superscript.com'
+#+:WEB-pass-@superscript.com:pass,ADDRESS='+WEB-pass-@superscript.com'
+#@:org:fail,ADDRESS='nada'
+##@::pass,ADDRESS='nada'
+#" | addrrules data.cdb data.cdb.tmp
+#echo $?
+#
+#cdbdump <data.cdb
+#
+#echo '--- addrrules requires @ in =+ rules'
+#echo "\
+#=:WEB1:exec,ADDRESS='=WEB@superscript.com'
+#" | addrrules wrong.cdb wrong.cdb.tmp
+#echo $?
+#
+#echo "\
+#+:web2:exec,ADDRESS='+web-@superscript.com'
+#" | addrrules wrong.cdb wrong.cdb.tmp
+#echo $?
+#
+#echo "\
+#=::pass,ADDRESS='nada'
+#" | addrrules wrong.cdb wrong.cdb.tmp
+#echo $?
+#
+#echo "\
+#+::pass,ADDRESS='nada'
+#" | addrrules wrong.cdb wrong.cdb.tmp
+#echo $?
+#
+#echo '--- addrrules permits @ catchall rules'
+#echo "\
+#+::pass,ADDRESS='nada'
+#" | addrrules wrong.cdb wrong.cdb.tmp
+#echo $?
+#
+## addrrulescheck
+#
+#echo '--- addrrulescheck requires an argument'
+#addrrulescheck
+#echo $?
+#
+#echo '--- addrrulescheck works'
+#addrrulescheck data.cdb web@superscript.com
+#echo $?
+#
+#echo '--- addrrulescheck uses default rules'
+#addrrulescheck data.cdb
+#echo $?
+#addrrulescheck data.cdb ""
+#echo $?
+#
+#echo '--- addrrulescheck uses domain'
+#addrrulescheck data.cdb nonsense@superscript.com
+#echo $?
+#addrrulescheck data.cdb web-nonplus-whatever-else@example.org
+#echo $?
+#
+#echo '--- addrrulescheck uses extensions'
+#addrrulescheck data.cdb web-minus-whatever@superscript.com
+#echo $?
+#addrrulescheck data.cdb web-plus+whatever@superscript.com
+#echo $?
+#addrrulescheck data.cdb web-nonplus-whatever-else@superscript.com
+#echo $?
+#
+#echo '--- addrrulescheck recognizes kill, defer, and pass'
+#addrrulescheck data.cdb web-kill-this@superscript.com
+#echo $?
+#addrrulescheck data.cdb web-defer-that@superscript.com
+#echo $?
+#addrrulescheck data.cdb web-pass-it-now@superscript.com
+#echo $?
+
+## addrcheck
+#echo '--- addrcheck requires an argument'
+#addrcheck
+#echo $?
+#
+#echo '--- addrcheck works'
+#echo "\
+#From: someone@example.com
+#CC: web@superscript.com
+#To: another@example.com
+#Subject: strangeness@example.com
+#
+#body1
+#body2
+#body3
+#" > msg.ac1
+#addrcheck data.cdb echo correct < msg.ac1
+#echo $?
+#
+#echo "\
+#From: someone@example.com
+#To: nobody@superscript.com
+#CC: another@example.com
+#Subject: strangeness@example.com
+#
+#body1
+#body2
+#body3
+#" > msg.ac2
+#addrcheck data.cdb echo correct < msg.ac2
+#echo $?
+#
+#echo '--- addrcheck executes prog'
+#addrcheck data.cdb echo hereur < msg.ac2
+#echo $?
+#
+#echo '--- addrcheck prints not found'
+#addrcheck data.cdb header1 header2 : echo wrong < msg.ac2
+#echo $?
+#
+#echo '--- addrcheck uses field arguments'
+#echo "\
+#From: web-ext@superscript.com
+#CC: web@superscript.com
+#To: another@example.com
+#Subject: strangeness@example.com
+#
+#body1
+#body2
+#body3
+#" > msg.ac3
+#addrcheck data.cdb from : sh -c 'echo $ADDRESS' < msg.ac3
+#echo $?
+#
+#echo '--- addrcheck uses literal arguments'
+#addrcheck data.cdb :web-minus-lit@superscript.com : sh -c 'echo $ADDRESS' < msg.ac3
+#echo $?
+#
+#addrcheck data.cdb to :web-minus-lit@superscript.com from : sh -c 'echo $ADDRESS' < msg.ac3
+#echo $?
+#
+#echo '--- addrcheck recognizes kill, defer, and pass'
+#echo "\
+#From: web-pass-that@superscript.com
+#CC: web-defer-this@superscript.com
+#To: web-kill-the-other@superscript.com
+#Subject: strangeness@example.com
+#
+#body1
+#body2
+#body3
+#" > msg.ac3
+#addrcheck data.cdb to : sh -c 'echo wrong: $ADDRESS' < msg.ac3
+#echo $?
+#addrcheck data.cdb cc : sh -c 'echo wrong: $ADDRESS' < msg.ac3
+#echo $?
+#addrcheck data.cdb from : sh -c 'echo wrong: $ADDRESS' < msg.ac3
+#echo $?
+#
+#echo '--- addrcheck with prog requires rewindable input'
+#echo "\
+#From: web-exec@superscript.com
+#CC: web-defer-this@superscript.com
+#To: web-kill-the-other@superscript.com
+#Subject: strangeness@example.com
+#
+#body1
+#body2
+#body3
+#" | {
+# addrcheck data.cdb from : sh -c 'echo wrong: $ADDRESS' 2>&1
+# echo $?
+#} | sed -e 's/rewind:.*/rewind: .../'
+

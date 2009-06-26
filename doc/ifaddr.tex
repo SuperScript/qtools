@@ -1,0 +1,42 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{ifaddr} program}
+
+\section{Interface}
+\begin{code}
+  ifaddr [ \arg{field} ... : ] [ \arg{addr} ... ]
+\end{code}
+where \carg{field} is an 822-format header field and \carg{addr} is an email
+address.  If no \carg{field} arguments appear, then \cmd{ifaddr} uses
+\bffont{To} and \bffont{Cc}.
+
+\cmd{ifaddr} reads a message from standard input, exiting 0 if any \carg{addr}
+appears in a \carg{field} header, and exiting 100 if there is no match.  Invoked
+with no \carg{addr} arguments, \cmd{ifaddr} looks for the address in the
+environment variable \cmd{\$RECIPIENT}.  Address comparisons are case
+insensitive.
+
+If it encounters a temporary error while reading input, \cmd{ifaddr} exits 111.
+
+If an address begins with \cmd{@}, then \cmd{ifaddr} compares it to the domain
+portion of addresses from each relevant field.
+
+
+For example, the \cmd{.qmail} line
+\begin{code}
+  | condtomaildir \arg{dir} ifaddr to cc from : \arg{myfriend}
+\end{code}
+writes correspondence with \carg{myfriend} to \carg{dir}.
+
+The invocation
+\begin{code}
+  | condtomaildir \arg{dir} ifaddr @example.com
+\end{code}
+writes a message with a \bffont{To} or \bffont{Cc} address in the domain
+\cmd{example.com} to \carg{dir}.
+\end{document}

@@ -1,0 +1,21 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{tomaildir} program}
+
+\section{Interface}
+In \cmd{.qmail}:
+\begin{code}
+  | tomaildir \arg{dir}
+\end{code}
+where \carg{dir} is a Maildir-format directory.
+
+For each email message it processes, \cmd{tomaildir} writes the
+message to \carg{dir}.  If the write succeeds, \cmd{tomaildir} exits
+0.  If it encounters a permanent error, \cmd{tomaildir} exits 100.
+Otherwise, \cmd{tomaildir} exits 111.
+\end{document}

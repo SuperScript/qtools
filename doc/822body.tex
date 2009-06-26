@@ -1,0 +1,25 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{822body} program}
+
+\section{Interface}
+\begin{code}
+  822body
+\end{code}
+
+\cmd{822body} reads an 822-format email message from standard input
+and prints the body of the message to standard output.
+
+\cmd{822body} considers the end of the message or the first line that
+cannot be part of an 822-format header field to terminate the message
+headers.  A nonblank line that terminates the headers is part of the
+message body.
+
+If it encounters an error processing a message, \cmd{822body} exits 111.
+Otherwise, \cmd{822body} exits 0.
+\end{document}

@@ -1,0 +1,31 @@
+20000318
+	Update to djblib-0.12
+
+20000414
+	Update to djblib-0.16
+
+20000416
+	Repair replier-config.
+	Set REQUEST* in replier.
+	Tweak help text, headers.
+	version: 0.51
+
+20000628
+	Move docs online.
+	Version 0.52.
+
+20000803
+	Correct argv botch in replier-config.
+	Version 0.53.
+
+20001231
+	Add 822addr, 822fields, 822headers, checkaddr, checkdomain
+	Version 0.54.
+
+20010630
+	Add ifaddr.  Update to djblib-0.23.
+	Version 0.55.
+
+20050515
+	Convert to /package.
+	Don't match header-name prefix in mess822_line.

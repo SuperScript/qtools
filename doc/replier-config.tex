@@ -1,0 +1,115 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{replier-config} Program}
+
+\section{Interface}
+\begin{code}
+  replier-config \arg{dir} \arg{dot} \arg{local} \arg{host} [ \arg{outlocal} [ \arg{outhost} ]]
+\end{code}
+where \carg{dir} is a directory, \carg{dot} is a \cmd{.qmail} file,
+\carg{local} is the local portion of an email address, and \carg{host}
+is a host name, \carg{outlocal} is either the local portion of an
+email address or the empty string, and \carg{outhost} is a host name.
+The directory \carg{dir} must begin with a slash.
+If \carg{outlocal} is not present, \cmd{replier-config} sets it to
+\carg{local}.  If \carg{outhost} is not present, \cmd{replier-config}
+sets it to \carg{host}.
+
+If \carg{outlocal} is not empty, \cmd{replier-config} creates a new
+email replier at the address
+\begin{code}
+  \arg{outlocal}-help@\arg{outhost}
+\end{code}
+
+If \carg{outlocal} is empty, \cmd{replier-config} creates a new email
+replier at the address
+\begin{code}
+  help@\arg{outhost}
+\end{code}
+
+In either case, \cmd{replier-config} sets up two \cmd{.qmail} files to
+control the help-address replier: \cmd{\arg{dot}-help} and
+\cmd{\arg{dot}-return-default}.  These files should control messages
+to the addresses \cmd{\arg{outlocal}-help@\arg{outhost}} and
+\cmd{\arg{outlocal}-return-@\arg{outhost}}, respectively (or
+\cmd{help@\arg{outhost}} and \cmd{return-@\arg{outhost}} if
+\carg{outlocal} is empty).
+
+Within \carg{dir}, \cmd{replier-config} creates several configuration
+files for \cmd{replier}.
+
+The first line of \cmd{\arg{dir}/inlocal} consists of \carg{local}.
+
+The first line of \cmd{\arg{dir}/inhost} consists of \carg{host}.
+
+The first line of \cmd{\arg{dir}/outlocal} consists of \carg{outlocal}.
+
+The first line of \cmd{\arg{dir}/outhost} consists of \carg{outhost}.
+
+The first line of \cmd{\arg{dir}/mailinglist} consists of 
+\cmd{contact \arg{helpaddress}; run by replier}, where
+\carg{helpaddress} is the help address created by
+\cmd{replier-config} as described above.
+
+The \cmd{\arg{dir}/headerremove} file contains
+\begin{code}
+  return-path
+  return-receipt-to
+  content-length
+\end{code}
+
+The \cmd{\arg{dir}/headeradd} file contains
+\begin{code}
+  Precedence: bulk
+\end{code}
+
+The \cmd{\arg{dir}/text/help} file contains text sent in response to
+messages received at the help address.
+
+\section{Typical usage}
+To configure a replier at the address \cmd{joe-replier-help@example.com}, the
+user \cmd{joe} issues the command
+\begin{code}
+  replier-config \swungdash /replier \swungdash /.qmail-replier joe-replier example.com
+\end{code}
+
+If email to \cmd{joe@example.com} is delivered to
+\cmd{joe@joehost.example.com}, the following command may be
+appropriate to configure a replier at
+\cmd{joe-replier-help@example.com}:
+\begin{code}
+   replier-config \swungdash /replier \swungdash /.qmail-replier joe-replier joehost.example.com joe-replier example.com
+\end{code}
+
+If the user \cmd{replier} handles mail for the virtual domain
+\cmd{replier.example.com}, then the following command creates a
+replier at \cmd{help@replier.example.com}:
+\begin{code}
+   replier-config \swungdash /replier \swungdash /.qmail replier example.com ""
+\end{code}
+
+\section{Adding replier addresses}
+To add a new replier address that filters only the body of a message,
+edit the \cmd{\arg{dir}/bodyfilter} shell script and add a new case
+corresponding to the new address.  Then create a symbolic link from
+\cmd{\arg{dir}/qmail-bodyfilter} to the \cmd{.qmail} file that
+controls the new address.  That's it!
+
+Adding a command to filter the message header is entirely analagous,
+but use \cmd{\arg{dir}/headerfilter} and
+\cmd{\arg{dir}/qmail-headerfilter}, while entire-message filters use
+\cmd{\arg{dir}/msgfilter} and \cmd{\arg{dir}/qmail-msgfilter}.
+
+
+\section{Bounce handling}
+By default, a replier created with \cmd{replier-config} silently
+throws away bounce messages.  The \cmd{.qmail} file controlling
+bounces is a symbolic link pointing to \cmd{\arg{dir}/bouncer}.  Edit
+\cmd{\arg{dir}/bouncer} to change the treatment of bounce messages.
+
+\end{document}

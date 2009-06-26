@@ -1,0 +1,35 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{checkaddr} program}
+
+\section{Interface}
+\begin{code}
+  checkaddr \arg{addr} ...
+\end{code}
+where \carg{addr} is an email header name.
+
+\cmd{checkaddr} reads email addresses from standard input,
+and compares them with each \carg{addr} without regard to case.
+If no \carg{addr} appears, \cmd{822addr} uses
+\cmd{\$RECIPIENT} as \carg{addr}.
+If it finds a match, \cmd{checkaddr} exits 0.  Otherwise,
+\cmd{checkaddr} exits 100.
+
+\cmd{checkaddr} reads addresses in the form output by 
+\href{\cmd{822addr}}{822addr.html}.  Each address appears
+as a null-terminated line with an introductory character.
+A \cmd{+} character introduces a
+delivery address, and a \cmd{(} character introduces a comment.
+The introductory characters are not part of the address.
+\cmd{checkaddr} compares its arguments only with delivery
+addresses, and ignores comments.
+
+If \cmd{checkaddr} finds an address matching \carg{addr}, it exits 0.
+Otherwise, \cmd{checkaddr} exits 100.
+
+\end{document}

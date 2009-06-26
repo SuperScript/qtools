@@ -1,0 +1,28 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{822headerok} program}
+
+\section{Interface}
+\begin{code}
+  822headerok
+\end{code}
+
+\cmd{822headerok} reads an 822-format email message from standard
+input.  If the message header is 822-compliant, \cmd{822headerok}
+exits 0.  If the header is not 822-compliant, \cmd{822headerok} exits
+100.  If it encounters a read error, \cmd{822headerok} exits 111.  In
+any case, \cmd{822headerok} writes no output.
+
+Under 822, the header is terminated by the end of the message or by a
+blank line.  If it sees a nonblank line that cannot be part of an
+822-format header field, \cmd{822headerok} considers the message
+noncompliant, and exits 100.
+
+Note that the UUCP-style \bffont{From_} line placed before a message
+in an mbox file is not part of the message.
+\end{document}

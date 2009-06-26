@@ -1,0 +1,30 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{iftoccfrom} program}
+
+\section{Interface}
+\begin{code}
+  iftoccfrom [ \arg{addr} ... ]
+\end{code}
+where \carg{addr} is an email address.
+
+\cmd{iftoccfrom} reads an 822-format message from standard input and exits 0 if
+\cmd{\$RECIPIENT} is listed in a \bffont{To}, \bffont{Cc}, or \bffont{From}
+field, and exits 100 otherwise.  
+If one or more \carg{addr} is present, then \cmd{iftoccfrom} ignores
+\cmd{\$RECIPIENT}, and uses each \carg{addr} instead.
+
+If it encounters a temporary error while reading input, \cmd{iftoccfrom} exits
+111.
+
+For example, the \cmd{.qmail} line
+\begin{code}
+  | condtomaildir \arg{dir} iftoccfrom \arg{afriend}
+\end{code}
+writes correspondence with \carg{afriend} to \carg{dir}.
+\end{document}

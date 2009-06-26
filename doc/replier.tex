@@ -1,0 +1,77 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{replier} program}
+
+\section{Interface}
+In \cmd{.qmail}:
+\begin{code}
+  | replier \arg{dir} \arg{address} \arg{prog}
+\end{code}
+where \carg{dir} is a directory, \carg{address} is an email address,
+and \carg{prog} is one or more arguments specifying a program to run.
+
+For each email message it processes, \cmd{replier} changes the working
+directory to \carg{dir}, executes \carg{prog} with the same message on
+standard input, and forwards the standard output from \carg{prog} to
+\carg{address}.
+
+\cmd{replier} adds a \bffont{Mailing-List} field to the message
+headers with the contents of \cmd{\arg{dir}/mailinglist}.  It rejects the
+message if there is already a \bffont{Mailing-List} field.
+
+\cmd{replier} adds to the message all fields listed in
+\cmd{\arg{dir}/headeradd}, followed by an appropriate
+\bffont{Delivered-To} line.  \cmd{replier} deletes from the message
+any fields with names listed in \cmd{\arg{dir}/headerremove}.
+\cmd{replier} performs its header editing on the output from
+\cmd{prog}.
+
+If \cmd{prog} exits 0, then \cmd{replier} forwards the message to
+\carg{address} and exits 99, so that further commands in \cmd{.qmail}
+are ignored.  If \cmd{prog} exits 111, \cmd{replier} exits 111, so
+that delivery is retried later.  If \cmd{prog} exits anything else, or
+does not exist, \cmd{condtomaildir} exits 0, so the rest of
+\cmd{.qmail} is processed.
+
+If it encounters a permanent error in handling a message,
+\cmd{replier} exits 100.  If it encounters a temporary error a
+message, \cmd{822headerfilter} exits 111.
+
+
+\cmd{replier} does not distribute bounce messages: if the environment
+variable \cmd{\$SENDER} is set, and is either empty or \cmd{\#@[]},
+then \cmd{replier} rejects the message.
+
+To create a replier that handles email sent to an address, use
+\cmd{replier-config}.
+
+
+\section{Environment variables}
+\cmd{replier} supplies several environment variables to \cmd{prog}.
+The recipient address that caused message processing by \cmd{replier}
+has one of two forms: \cmd{\arg{inlocal}-\arg{request}@\arg{domain}},
+where \carg{inlocal} matches the first line of
+\cmd{\arg{dir}/inlocal}, or \cmd{\arg{request}@\arg{domain}}, when
+\cmd{\arg{dir}/inlocal} has an empty first line.  In either case,
+\cmd{replier} sets the following environment variables:
+
+\bffont{NB}: These environment variables are not quoted.  They
+are under the control of the sender.
+
+
+\cmd{\$REQUEST} is \carg{request} in the recipient address.
+
+\cmd{\$REQUEST2} is the portion of \carg{request} in the recipient
+address that follows the first hyphen.
+
+\cmd{\$REQUEST3} is the portion of \carg{request} in the recipient
+address that follows the second hyphen.
+
+\cmd{\$REQUEST4} is the portion of \carg{request} in the recipient
+address that follows the third hyphen.
+\end{document}

@@ -1,0 +1,72 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\chapter{qtools}
+
+\begin{chapterintro}
+\href{How to install qtools}{install.html}\\
+
+\href{The \cmd{822body} program}{822body.html}\\
+\href{The \cmd{822bodyfilter} program}{822bodyfilter.html}\\
+\href{The \cmd{822headerfilter} program}{822headerfilter.html}\\
+\href{The \cmd{822headerok} program}{822headerok.html}\\
+
+\href{The \cmd{822fields} program}{822fields.html}\\
+\href{The \cmd{822headers} program}{822headers.html}\\
+
+\href{The \cmd{822addr} program}{822addr.html}\\
+\href{The \cmd{checkaddr} program}{checkaddr.html}\\
+\href{The \cmd{checkdomain} program}{checkdomain.html}\\
+\href{The \cmd{ifaddr} program}{ifaddr.html}\\
+\href{The \cmd{iftoccfrom} program}{iftoccfrom.html}\\
+
+\href{The \cmd{filterto} program}{filterto.html}\\
+
+\href{The \cmd{condtomaildir} program}{condtomaildir.html}\\
+\href{The \cmd{tomaildir} program}{tomaildir.html}\\
+
+\href{The \cmd{replier} program}{replier.html}\\
+\href{The \cmd{replier-config} program}{replier-config.html}\\
+
+\href{Examples}{examples.html}\\
+
+\href{A mailing list for qtools discussion}{../lists.html\#qtools}\\
+\end{chapterintro}
+
+\section{What is qtools?}
+The qtools package comprises several utilities for use with qmail,
+typically as part of \cmd{.qmail} command processing.
+
+\cmd{822body} extracts the body from a message.
+
+\cmd{822bodyfilter} filters a message body, preserving the header.
+
+\cmd{822headerfilter} filters a message header, preserving the body.
+
+\cmd{822headerok} tests for a well-formed message header.
+
+\cmd{822fields} extracts field values from a message header.
+
+\cmd{822headers} extracts field copies from a message header.
+
+\cmd{822addr} extracts addresses from a message header.
+
+\cmd{checkaddr} checks an address list for matching addresses.
+
+\cmd{checkdomain} checks an address list for matching domains.
+
+\cmd{iftoccfrom} tests for addresses in if, to, cc, and from header fields.
+
+\cmd{filterto} filters and forwards a message.
+
+\cmd{condtomaildir} conditionally writes a message to a maildir.
+
+\cmd{tomaildir} writes a message to a maildir.
+
+\cmd{replier} is a simple autoreplier.
+
+\cmd{replier-config} configures \cmd{replier}.
+\end{document}

@@ -1,0 +1,56 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{How to install qtools}
+
+qtools comes with NO WARRANTY.
+
+\section{System requirements}
+qtools works only under UNIX systems that run qmail.  Additionally,
+email repliers configured with \cmd{replier-config} require
+\cmd{ezmlm-weed} from the \href{ezmlm}{http://cr.yp.to/ezmlm.html}
+package.
+
+\section{Installation}
+
+Download the qtools package.  The most recent qtools package is
+\href{\version{qtools}}{\package{qtools}.tar.gz}.
+
+Unpack the qtools package:
+\begin{code}
+  gunzip \package{qtools}.tar
+  tar -xf \package{qtools}.tar
+  cd \package{qtools}
+\end{code}
+
+Compile the qtools programs:
+\begin{code}
+  make
+\end{code}
+
+Run some tests.  Normally, this produces no output:
+\begin{code}
+  make test
+\end{code}
+If the tests fail, manually compare their output with the expected results:
+\begin{code}
+  ./rts \>rts.out
+  diff rts.out rts.exp
+\end{code}
+
+As root, install the qtools programs under \cmd{/usr/local}:
+\begin{code}
+  make setup check
+\end{code}
+
+Report successful installation:
+\begin{code}
+  ( echo 'First M. Last'; cat `cat SYSDEPS` ) \
+  | mail web-inst@superscript.com
+\end{code}
+replacing \cmd{First M. Last} with your name.
+\end{document}

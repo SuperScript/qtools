@@ -1,0 +1,35 @@
+%& sstdoc
+\banner{qtools}
+\begin{document}
+\image{../sstlogo.gif}{sstlogo}
+\parent{../superscript}{\SST}
+\parent{../software}{Software}
+\parent{intro}{qtools}
+\chapter{The \cmd{condtomaildir} program}
+
+\section{Interface}
+In \cmd{.qmail}:
+\begin{code}
+  | condtomaildir \arg{dir} \arg{prog}
+\end{code}
+where \carg{dir} is a Maildir-format directory and \carg{prog} is one
+or more arguments specifying a program to run for each message.
+
+For each email message it processes, \cmd{condtomaildir} runs
+\carg{prog} with the message on standard input.  If \carg{prog} exits
+0, \cmd{condtomaildir} writes the email message to \carg{dir}, and
+then exits 99, so that further commands in \cmd{.qmail} are ignored.
+If \carg{prog} exits 111, \cmd{condtomaildir} exits 111, so delivery
+is retried later. If \carg{prog} exits anything else, or does not
+exist, \cmd{condtomaildir} exits 0, so the rest of \cmd{.qmail} is
+processed.
+
+If it encounters a permanent error in handling a message,
+\cmd{condtomaildir} exits 100.  If it encounters a temporary
+error in handling a message, \cmd{condtomaildir} exits 111.
+
+
+If \cmd{condtomaildir} encounters a permanent error attempting to run
+\carg{prog}, it exits 100.  If \cmd{condtomaildir} encounters a
+temporary error in attempting to run \carg{prog}, it exits 111.
+\end{document}
