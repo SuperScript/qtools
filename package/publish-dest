@@ -1,2 +1,4 @@
 localhost:html localhost:/home/web/www/www.superscript.com/qtools/
 localhost:dist localhost:/home/web/www/www.superscript.com/qtools/
+aaa:html aaa:/doc/host/www.superscript.com/qtools/
+aaa:dist aaa:/doc/host/www.superscript.com/qtools/
