@@ -1,0 +1,26 @@
+= 822headerfilter (1)
+:doctype: manpage
+
+== NAME
+822headerfilter - filter a message header
+
+== SYNOPSIS 
+!!!!
+822headerfilter !prog!
+!!!!
+
+== DESCRIPTION 
+The +822headerfilter+ program reads an 822-format email message from standard
+input.  It executes +!prog!+ with the header of the message on standard input.
+
+The end of the message or the first line that cannot be part of an 822-format
+header field terminates the headers.
+
+== EXIT STATUS 
+If it encounters a permanent error in reading input or executing +!prog!+,
++822headerfilter+ exits{nbsp}100.  If it encounters a temporary error in reading
+input or executing +!prog!+, +822headerfilter+ exits{nbsp}111.  Otherwise,
++822headerfilter+ yields the same exit code as +!prog!+.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

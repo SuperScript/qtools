@@ -1,0 +1,29 @@
+= 822fields (1)
+:doctype: manpage
+
+== NAME
+822fields - extract headers from a message
+
+== SYNOPSIS 
+!!!!
+822fields !field! ...
+!!!!
+
+== DESCRIPTION 
+
+The +822fields+ program reads an 822-format email message from standard input.
+For each input header +!field!+, +822fields+ prints one line containing the
+value of the field to standard output.  If no +!field!+ appears, +822fields+
+looks for +!subject!+.
+
+The end of the message or the first line that cannot be part of an 822-format
+header field terminates the message message body.
+
+== EXIT STATUS 
+
+If it encounters an error while processing a message, +822fields+ exits 111.
+If +822fields+ finds any matching headers, it exits{nbsp}0.  Otherwise,
++822fields+ exits{nbsp}100.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

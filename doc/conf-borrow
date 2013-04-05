@@ -1,0 +1,41 @@
+# This file contains a shell script that attempts to borrow a file.
+# It must return 0 if borrowing succeeds and nonzero otherwise.
+
+## Example 1: never borrow
+#exit 111
+
+# Example 2: borrow from dirs listed in conf-borrow-path
+# Executes from the compile directory after linking files in src.
+test -r conf-borrow-path || exit 111
+test 0 -lt $# || exit 111
+
+file="$1"
+src="../src/$file"
+tmp="../src/$file.$$.tmp"
+cleanup() {
+  cleanup_rcode=$?
+  rm -f "$tmp"
+  exit $cleanup_rcode
+}
+trap 'cleanup' EXIT 
+awk '$1{print $1;next};{exit 0}' conf-borrow-path | while read p
+do
+  test -f "$p/$file" || continue
+  mkdir -p "`dirname "$tmp"`" \
+    && cp "$p/$file" "$tmp" \
+    && mv "$tmp" "$src" \
+    && ln -s "src/$file" "$file" \
+    && echo 0 \
+    && break
+
+  echo 111
+  break
+done 2>/dev/null | \
+if read rcode
+then
+  exit $rcode
+else
+  exit 111
+fi
+
+

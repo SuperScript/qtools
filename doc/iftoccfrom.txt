@@ -1,0 +1,33 @@
+= iftoccfrom (1)
+:doctype: manpage
+
+== NAME
+iftoccfrom - look for addresses in standard message headers
+
+== SYNOPSIS 
+!!!!
+iftoccfrom [ !addr! ... ]
+!!!!
+
+== DESCRIPTION 
+The +iftoccfrom+ program reads an 822-format message from standard input and matches 
+address in the +To+, +Cc+, or +From+ headers against +!addr!+.
+If it finds a match, +iftoccfrom+ exits{nbsp}0.  Otherwise it exits{nbsp}100.
+If no +!addr!+ argument is present, then +iftoccfrom+ uses the address in the
+environment variable +$RECIPIENT+ as +!addr!+.
+
+
+== EXIT STATUS 
+If it encounters a temporary error while reading input, +iftoccfrom+
+exits{nbsp}111.
+
+
+== EXAMPLES 
+The +.qmail+ line
+!!!!
+| condtomaildir !dir! iftoccfrom !afriend!
+!!!!
+writes correspondence with +!afriend!+ to +!dir!+.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

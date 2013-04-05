@@ -1,0 +1,28 @@
+= 822headers (1)
+:doctype: manpage
+
+== NAME
+822headers - FIXME
+
+== SYNOPSIS 
+!!!!
+822headers !field! ...
+!!!!
+
+
+== DESCRIPTION 
+The +822headers+ program reads an 822-format email message from standard
+input.  For each input header +!field!+, +822headers+ prints a full copy of
+the field, including name, to standard output.  If no +!field!+ appears,
++822headers+ looks for +!subject!+.
+
+The end of the message or the first line that cannot be part of an 822-format
+header field terminates the message headers.
+
+== EXIT STATUS 
+If it encounters an error while processing a message, +822headers+
+exits{nbsp}111.  If +822headers+ finds any matching headers, it exits{nbsp}0.
+Otherwise, +822headers+ exits{nbsp}100.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

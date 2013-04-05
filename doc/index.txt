@@ -1,0 +1,99 @@
+= Introduction
+
+* How to install  link:install.html[qtools]
+
+////
+////
+
+* The link:822addr.html[+822addr+] program
+* The link:822body.html[+822body+] program
+* The link:822bodyfilter.html[+822bodyfilter+] program
+* The link:822fields.html[+822fields+] program
+* The link:822headerfilter.html[+822headerfilter+] program
+* The link:822headerok.html[+822headerok+] program
+* The link:822headers.html[+822headers+] program
+
+////
+////
+
+* The link:checkaddr.html[+checkaddr+] program
+* The link:checkdomain.html[+checkdomain+] program
+* The link:ifaddr.html[+ifaddr+] program
+* The link:iftoccfrom.html[+iftoccfrom+] program
+
+////
+////
+
+* The link:condtomaildir.html[+condtomaildir+] program
+* The link:tomaildir.html[+tomaildir+] program
+* The link:filterto.html[+filterto+] program
+
+////
+////
+
+* The link:replier.html[+replier+] program
+* The link:replier-config.html[+replier-config+] program
+
+
+== What Is qtools?
+The qtools package contains utilities for use with qmail,
+typically as part of +.qmail+ command processing.
+
++822addr+::
+Extract addresses from a message header.
+
++822body+::
+Extract the body from a message.
+
++822bodyfilter+::
+Filter a message body, preserving the header.
+
++822fields+::
+Extract field values from a message header.
+
++822headerfilter+::
+Filter a message header, preserving the body.
+
++822headerok+::
+Test for a well-formed message header.
+
++822headers+::
+Extract field copies from a message header.
+
+////
+////
+
++checkaddr+::
+Check an address list for matching addresses.
+
++checkdomain+::
+Check an address list for matching domains.
+
++ifaddr+::
+Test for addresses in selected header fields.
+
++iftoccfrom+::
+Test for addresses in if, to, cc header fields.
+
+////
+////
+
++condtomaildir+::
+Conditionally write a message to a maildir.
+
++tomaildir+::
+Write a message to a maildir.
+
++filterto+::
+Filter and forwards a message.
+
+////
+////
+
++replier+::
+Automatically reply to a message.
+
++replier-config+::
+Configure +replier+.
+
+

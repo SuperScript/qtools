@@ -1,0 +1,23 @@
+= tomaildir (1)
+:doctype: manpage
+
+== NAME
+tomaildir - deliver a message to a maildir
+
+
+== SYNOPSIS 
+In +.qmail+:
+!!!!
+| tomaildir !dir!
+!!!!
+
+
+== DESCRIPTION 
+For each email message it processes, +tomaildir+ writes the message to
++!dir!+.  If the write succeeds, +tomaildir+ exits{nbsp}0.  If it encounters
+a permanent error, +tomaildir+ exits{nbsp}100.  Otherwise, +tomaildir+
+exits{nbsp}111.
+
+
+== AUTHOR
+William Baxter <sst@superscript.com>

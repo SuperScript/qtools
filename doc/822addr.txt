@@ -1,0 +1,37 @@
+= 822addr (1)
+:doctype: manpage
+
+== NAME
+822addr - extract email addresses from messages
+
+== SYNOPSIS 
+!!!!
+822addr !field! ...
+!!!!
+
+== DESCRIPTION 
+The +822addr+ program reads an 822-format email message from standard input.
+For each input header +!field!+, +822addr+ parses the value of the header as
+one or more email addresses and prints the result to standard output.  If no
++!field!+ appears, +822addr+ looks for +!to!+ and +!cc!+.
+
+Output records are null terminated.  The first character of each output record
+indicates the address type, and the remainder is the value.  A delivery
+address begins with a +++ character, and a comment begins with a +(+
+character.  When paired, a comment precedes an address.
+
+The end of the message or the first line that cannot be part of an 822-format
+header field terminates the search.
+
+== EXIT STATUS 
+
+If it encounters an error while processing a message, +822addr+
+exits{nbsp}111.  If +822addr+ finds any matching headers, it exits{nbsp}0.
+Otherwise, +822addr+ exits{nbsp}100.
+
+== BUGS
+No formatting options.
+
+== AUTHOR
+William Baxter <sst@superscript.com>
+

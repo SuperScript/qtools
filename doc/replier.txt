@@ -1,0 +1,68 @@
+= replier (1)
+:doctype: manpage
+
+== NAME
+replier - automatically respond to messages
+
+== SYNOPSIS 
+In +.qmail+:
+!!!!
+| replier !dir! !address! !prog!
+!!!!
+
+
+== DESCRIPTION 
+The +replier+ program changes the working directory to +!dir!+, executes
++!prog!+ with a message on standard input, and forwards the standard output
+from +!prog!+ to +!address!+.  It adds a +Mailing-List+ field to the message
+headers with the contents of +!dir!/mailinglist+.  It rejects the message if
+there is already a +Mailing-List+ field.  It adds to the message all fields
+listed in +!dir!/headeradd+, followed by an appropriate +Delivered-To+ line.
+It deletes from the message any fields with names listed in
++!dir!/headerremove+.  It performs its header editing on the output from
++!prog!+.
+
+If +!prog!+ exits 0, then +replier+ forwards the message to +!address!+ and
+exits{nbsp}99.  If +prog+ exits{nbsp}111, +replier+ exits{nbsp}111.  If +prog+
+exits anything else, or does not exist, +replier+ exits{nbsp}0.
+
+
+The +replier+ program does not distribute bounce messages: if the environment
+variable +$SENDER+ is set, and is either empty or +#@[]+, then +replier+
+rejects the message.
+
+
+=== Environment variables
+The +replier+ program supplies several environment variables to +prog+.  The
+recipient address that caused message processing by +replier+ has one of two
+forms: +!inlocal!-!request!@!domain!+, where +!inlocal!+ matches the first
+line of +!dir!/inlocal+, or +!request!@!domain!+, when +!dir!/inlocal+ has an
+empty first line.  In either case, +replier+ sets the following environment
+variables:
+
+*NB*: These environment variables are not quoted.  They are under the control
+of the sender.
+
++$REQUEST+::
+The +!request!+ portionh of the recipient address.
+
++$REQUEST2+::
+The portion of +!request!+ in the recipient address that follows the first
+hyphen.
+
++$REQUEST3+::
+The portion of +!request!+ in the recipient address that follows the second
+hyphen.
+
++$REQUEST4+::
+The portion of +!request!+ in the recipient address that follows the third
+hyphen.
+
+
+== EXIT STATUS 
+If it encounters a permanent error in handling a message, +replier+
+exits{nbsp}100.  If it encounters a temporary error a message, +replier+
+exits{nbsp}111.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

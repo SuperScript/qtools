@@ -1,0 +1,48 @@
+= How To Install qtools
+
+qtools comes with NO WARRANTY.
+
+== System requirements
+The qtools package works only under UNIX systems that run qmail.
+Additionally, email repliers configured with +replier-config+ require
++ezmlm-weed+ from the http://cr.yp.to/ezmlm.html[ezmlm] package.
+
+== Installation
+
+Download the qtools package.  The most recent qtools package is
+link:{package}-{version}.tar.gz[{version}].
+
+Unpack the qtools package:
+!!!!
+gunzip {package}-{version}.tar
+tar -xf {package}-{version}.tar
+cd {package}
+!!!!
+
+Compile the qtools programs:
+!!!!
+make
+!!!!
+
+Run some tests.  Normally, this produces no output:
+!!!!
+make test
+!!!!
+If the tests fail, manually compare their output with the expected results:
+!!!!
+./rts > rts.out
+diff rts.out rts.exp
+!!!!
+
+As root, install the qtools programs under +/usr/local+:
+!!!!
+make setup check
+!!!!
+
+Report successful installation:
+!!!!
+( echo 'First M. Last'; cat `cat SYSDEPS` ) \
+| mail web-inst@superscript.com
+!!!!
+replacing +First M. Last+ with your name.
+

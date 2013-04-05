@@ -1,0 +1,26 @@
+= 822body (1)
+:doctype: manpage
+
+== NAME
+822body - extract the body from a message
+
+== SYNOPSIS 
+!!!!
+822body
+!!!!
+
+== DESCRIPTION 
+The +822body+ program reads an 822-format email message from standard input
+and prints the body of the message to standard output.
+
+The end of the message or the first line that cannot be part of an 822-format
+header field terminates the message headers.  A nonblank line that terminates
+the headers is part of the message body.
+
+
+== EXIT STATUS 
+If it encounters an error processing a message, +822body+ exits{nbsp}111.
+Otherwise, +822body+ exits{nbsp}0.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

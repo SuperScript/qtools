@@ -1,0 +1,45 @@
+= ifaddr (1)
+:doctype: manpage
+
+== NAME
+ifaddr - match addresses in headers
+
+== SYNOPSIS 
+!!!!
+ifaddr [ !field! ... : ] [ !addr! ... ]
+!!!!
+
+
+== DESCRIPTION 
+The +ifaddr+ program reads a message from standard input.  It exits{nbsp}0 if
+any +!addr!+ appears in a +!field!+ header, and exiting{nbsp}100 if there is
+no match.  Invoked with no +!addr!+ arguments, +ifaddr+ looks for the address
+in the environment variable +$RECIPIENT+.  Address comparisons are case
+insensitive.  If no +!field!+ arguments appear, then +ifaddr+ uses +To+ and
++Cc+.
+
+If an +!addr!+ begins with +@+, then +ifaddr+ compares it to the domain
+portion of addresses from each field.
+
+
+== EXIT STATUS 
+If it encounters a temporary error while reading input, +ifaddr+
+exits{nbsp}111.
+
+
+== EXAMPLES 
+The +.qmail+ line
+!!!!
+| condtomaildir !dir! ifaddr to cc from : !myfriend!
+!!!!
+writes correspondence with +!myfriend!+ to +!dir!+.
+
+The +.qmail+ line
+!!!!
+| condtomaildir !dir! ifaddr @example.com
+!!!!
+writes a message with a +To+ or +Cc+ address in the domain +example.com+ to
++!dir!+.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

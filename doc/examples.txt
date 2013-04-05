@@ -1,0 +1,64 @@
+\section{Examples}
+\label{examples}
+
+
+== +.qmail+ commands
+Save messages to test@example.com:
+!!!!%
+  | condtomaildir ./Test ifaddr to cc : test@example.com
+!!!!
+
+Save messages to or from @example.com:
+!!!!%
+  | condtomaildir ./Test ifaddr to cc from : @example.com
+!!!!
+
+Save a message if it was addressed to +test@example.com+:
+!!!!%
+  | condtomaildir ./Test iftocc test@example.com
+!!!!
+
+== Email-based servers
+This section provides several examples of email servers based on qtools.
+These are simple-minded servers, designed only to demonstrate methods
+of providing services, and not as examples of useful services.
+
+link:mailto:help@filter.superscript.com[help]: Fetch help information on the available email filters.
+
+link:mailto:cat@filter.superscript.com[cat]: Return a copy of the original message.
+
+link:mailto:foldlines-20@filter.superscript.com[foldlines-20]:
+    Fold lines in the message body to 20 characters and return the result.
+
+link:mailto:presubject-OK@filter.superscript.com[presubject-OK]:
+    Add [OK] to the beginning of the Subject line of the message
+    and send back the result.
+
+link:mailto:revline@filter.superscript.com[revline]: Reverse each line of the message body (after folding lines to 1024.
+    characters) and send back the result.
+
+link:mailto:rot13@filter.superscript.com[rot13]: Apply rot13 encoding to the message body and send back the result.
+
+You can download the link:examples.tar.gz[scripts] for this example
+replier.  The qtools package includes the programs required for the
+examples above, but does not install them.
+
+Documentation for the programs used in the examples is available
+link:../miscellanea/intro.html[here].
+
+
+
+== SYNOPSIS 
+
+== DESCRIPTION 
+
+== EXIT STATUS 
+
+== EXAMPLES 
+
+== SEE ALSO 
+
+== BUGS 
+
+== AUTHOR
+William Baxter <sst@superscript.com>

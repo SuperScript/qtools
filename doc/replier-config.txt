@@ -1,0 +1,122 @@
+= replier-config (1)
+:doctype: manpage
+
+== NAME
+replier-config - configure an instance of replier
+
+
+== SYNOPSIS 
+!!!!
+replier-config !dir! !dot! !local! !host! [ !outlocal! [ !outhost! ]]
+!!!!
+
+
+== DESCRIPTION 
+The +replier-config+ program configures an instance of
+link:replier.html[+replier+], the qtools auto-responder.  It creates +!dir!+
+and populates it with configuration files.  It creates two qmail files called
++!dot!-help+ and +!dot!-return-default+.  The +!local!+, +!host!+ arguments
+together determine the local delivery address configured for auto-response.
+The +!outlocal!+, +!outhost!+ arguments are used in the responses.
+
+The directory +!dir!+ must begin with a slash.  If +!outlocal!+ is not
+present, +replier-config+ sets it to +!local!+.  If +!outhost!+ is not
+present, +replier-config+ sets it to +!host!+.
+
+If +!outlocal!+ is not empty, +replier-config+ creates a new email replier at
+the address
+!!!!
+!outlocal!-help@!outhost!
+!!!!
+
+If +!outlocal!+ is empty, +replier-config+ creates a new email
+replier at the address
+!!!!
+help@!outhost!
+!!!!
+
+In either case, +replier-config+ sets up two +.qmail+ files to control the
+help-address replier: +!dot!-help+ and +!dot!-return-default+.  These files
+should control messages to the addresses +!outlocal!-help@!outhost!+ and
++!outlocal!-return-@!outhost!+, respectively (or +help@!outhost!+ and
++return-@!outhost!+ if +!outlocal!+ is empty).
+
+Within +!dir!+, +replier-config+ creates several configuration files for
++replier+.
+
+The first line of +!dir!/inlocal+ consists of +!local!+.
+
+The first line of +!dir!/inhost+ consists of +!host!+.
+
+The first line of +!dir!/outlocal+ consists of +!outlocal!+.
+
+The first line of +!dir!/outhost+ consists of +!outhost!+.
+
+The first line of +!dir!/mailinglist+ consists of 
++contact !helpaddress!; run by replier+, where
++!helpaddress!+ is the help address created by
++replier-config+ as described above.
+
+The +!dir!/headerremove+ file contains
+!!!!
+return-path
+return-receipt-to
+content-length
+!!!!
+
+The +!dir!/headeradd+ file contains
+!!!!
+Precedence: bulk
+!!!!
+
+The +!dir!/text/help+ file contains text sent in response to messages received
+at the help address.
+
+== EXAMPLES 
+To configure a replier at the address +joe-replier-help@example.com+, the
+user +joe+ issues the command
+!!!!
+replier-config $HOME/replier $HOME/.qmail-replier joe-replier example.com
+!!!!
+
+If email to +joe@example.com+ is delivered to
++joe@joehost.example.com+, the following command may be
+appropriate to configure a replier at
++joe-replier-help@example.com+:
+!!!!
+replier-config $HOME/replier $HOME/.qmail-replier joe-replier joehost.example.com joe-replier example.com
+!!!!
+
+If the user +replier+ handles mail for the virtual domain
++replier.example.com+, then the following command creates a
+replier at +help@replier.example.com+:
+!!!!
+replier-config $HOME/replier $HOME/.qmail replier example.com ""
+!!!!
+
+=== Adding replier addresses
+To add a new replier address that filters only the body of a message,
+edit the +!dir!/bodyfilter+ shell script and add a new case
+corresponding to the new address.  Then create a symbolic link from
++!dir!/qmail-bodyfilter+ to the +.qmail+ file that
+controls the new address.  That's it!
+
+Adding a command to filter the message header is entirely analagous,
+but use +!dir!/headerfilter+ and
++!dir!/qmail-headerfilter+, while entire-message filters use
++!dir!/msgfilter+ and +!dir!/qmail-msgfilter+.
+
+
+=== Bounce handling
+By default, a replier created with +replier-config+ silently
+throws away bounce messages.  The +.qmail+ file controlling
+bounces is a symbolic link pointing to +!dir!/bouncer+.  Edit
++!dir!/bouncer+ to change the treatment of bounce messages.
+
+
+== BUGS 
+The very existence of this program is a bug.
+
+
+== AUTHOR
+William Baxter <sst@superscript.com>

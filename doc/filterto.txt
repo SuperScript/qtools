@@ -1,0 +1,31 @@
+= filterto (1)
+:doctype: manpage
+
+== NAME
+filterto - conditionally forward a filtered message
+
+== SYNOPSIS 
+In +.qmail+:
+!!!!
+| filterto !address! !prog!
+!!!!
+
+where +!address!+ is an email address, and +!prog!+ is one or
+more arguments specifying a program to run for each message.
+
+== DESCRIPTION 
+The +filterto+ program runs +!prog!+ with a message on standard input.  If
++!prog!+ exits{nbsp}0, +filterto+ forwards the standard output from +!prog!+
+to +!address!+, and then exits{nbsp}99.  If +!prog!+ exits{nbsp}111,
++filterto+ exits{nbsp}111. If +!prog!+ exits with any other exit
+code, or does not exist, +filterto+ exits{nbsp}0. 
+
+*NB*: It is not safe for +!prog!+ to fork a child that reads the message in
+the background.
+
+*NB*: If you use +filterto+ in a +.qmail+ file, make sure to add a line
+specifying delivery to your normal mailbox.
+
+
+== AUTHOR
+William Baxter <sst@superscript.com>

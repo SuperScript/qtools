@@ -1,0 +1,11 @@
+build_ifchanged "$2.txt" asciidoc.conf asciidoc-docbook.conf attribute.conf
+safe a2x \
+  -d manpage -f manpage \
+  --asciidoc-opt="--conf-file=./asciidoc.conf" \
+  --asciidoc-opt="--conf-file=./asciidoc-docbook.conf" \
+  --asciidoc-opt="--conf-file=./attribute.conf" \
+  "$2.txt"
+
+build_notarget
+exit $?
+

@@ -1,0 +1,29 @@
+= condtomaildir (1)
+:doctype: manpage
+
+== NAME
+condtomaildir - conditionally deliver a message to a maildir
+
+== SYNOPSIS 
+In +.qmail+:
+!!!!
+| condtomaildir !dir! !prog!
+!!!!
+
+== DESCRIPTION 
+The +condtomaildir+ runs the program +!prog!+ with an email message on
+standard input.  It expects +!dir!+ to be a Maildir-format directory.
+
+If +!prog!+ exits{nbsp}0, +condtomaildir+ writes the email message to the
+maildir +!dir!+, and then exits{nbsp}99.  If +!prog!+ exits{nbsp}111,
++condtomaildir+ exits{nbsp}111.  If +!prog!+ exits anything else, or does not
+exist, +condtomaildir+ exits{nbsp}0.
+
+== EXIT STATUS 
+If it encounters a permanent error in handling a message, +condtomaildir+
+exits{nbsp}100.  If it encounters a temporary error in handling a message,
++condtomaildir+ exits{nbsp}111.
+
+
+== AUTHOR
+William Baxter <sst@superscript.com>

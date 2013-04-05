@@ -1,0 +1,28 @@
+= 822headerok (1)
+:doctype: manpage
+
+== NAME
+822headerok - FIXME
+
+== SYNOPSIS 
+!!!!
+822headerok
+!!!!
+
+
+== DESCRIPTION 
+The +822headerok+ program reads an 822-format email message from standard
+input.  In any case, +822headerok+ writes no output.
+
+The end of the message or a blank line terminate the headers.
+
+Note that the UUCP-style +From_+ line placed before a message in an mbox file
+is not part of the message.
+
+== EXIT STATUS 
+If it encounters a read error, +822headerok+ exits{nbsp}111.  If it sees
+a nonblank line that cannot be part of an 822-format header field,
++822headerok+ exits{nbsp}100.  Otherwise it exits{nbsp}0.
+
+== AUTHOR
+William Baxter <sst@superscript.com>

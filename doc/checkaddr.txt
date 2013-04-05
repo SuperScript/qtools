@@ -1,0 +1,28 @@
+= checkaddr (1)
+:doctype: manpage
+
+== NAME
+checkaddr - check input for matching address
+
+== SYNOPSIS 
+!!!!
+checkaddr !addr! ...
+!!!!
+
+
+== DESCRIPTION 
+The +checkaddr+ program reads email addresses from standard input, and
+compares them with each +!addr!+ without regard to case.  If no +!addr!+
+appears, +822addr+ uses the environment variable +$RECIPIENT+ as +!addr!+.
+The +checkaddr+ program reads addresses in the form output by
+link:822addr.html[+822addr+].  It considers only delivery addresses and
+ignores address comments.
+
+
+== EXIT STATUS 
+If it finds a match, +checkaddr+ exits{nbsp}0.  Otherwise, +checkaddr+
+exits{nbsp}100.
+
+
+== AUTHOR
+William Baxter <sst@superscript.com>
