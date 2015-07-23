@@ -1,34 +1,37 @@
 #!/bin/sh
-shout() { echo "package/build: $@" >&2; }
-barf() { shout "fatal: $@"; exit 111; }
-safe() { "$@" || barf "cannot $@"; }
+shout() { echo "package/build: $*" >&2; }
+barf() { shout "fatal: $*"; exit 111; }
+safe() { "$@" || barf "cannot $*"; }
 usage() {
-  shout "usage: package/build [ --help -v N -f ] [ target ... ]"
+  shout "usage: package/build [ --help -F -v -q ] [ opts target ... ]"
   exit 100
 }
-####
-umask 022
-[ -d package ] || barf "no package directory"
-[ -d src     ] || barf "no src directory"
-here=`env - PATH=$PATH pwd`
-#PATH="$here/compile:/command:$PATH"
-#export PATH
-#
-[ "$1" = "--help" ] && usage
-#
-verbose="1"
-force=""
-while [ $# -gt 0 ]
+
+
+#### MAIN
+
+test -d package || barf "no package directory"
+
+remove=""
+verbose=""
+while test $# -gt 0
 do
   case "$1" in
-    -v)
-      shift
-      verbose="$1"
+    -F)
+      remove="-F"
       shift
       ;;
-    -f)
-      force="-f"
+    -q)
+      verbose="$verbose -q"
       shift
+      ;;
+    -v)
+      verbose="$verbose -v"
+      shift
+      ;;
+    --)
+      shift
+      break
       ;;
     -*)
       usage
@@ -38,20 +41,18 @@ do
       ;;
   esac
 done
-#
-if [ $# -gt 0 ]
+
+here="`env - PATH=$PATH pwd`"
+
+if test 0 -eq $#
 then
-  safe package/build-run $force compile src build "$@"
-  safe package/build-command command compile `awk '
-    BEGIN {
-      for (i = 1;i < ARGC; ++i)
-	file[ARGV[i]] = 1
-      ARGC = 1
-    }
-    { if (file[$1]) print $1 }
-  ' "$@" < package/commands`
-else
-  safe package/build-run $force compile src build it
-  safe package/build-command command compile `cat package/commands`
+  exec package/create $remove compile src build $verbose target \
+    `awk '$1{print $1}' < src/build=d`
 fi
+
+exec package/create $remove compile src build $verbose target "$@"
+
+barf "cannot build $*"
+
 exit 0
+

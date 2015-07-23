@@ -1,4 +1,4 @@
 /package/host/superscript.com/command
 
-Directories to soft link commands into, one per line.
+Directories to symlink commands into, one per line.
 The first empty line terminates the list.
