@@ -16,7 +16,7 @@
 #define SUBGETOPTDONE -1
 
 extern int subgetopt(int,char *const *,const char *);
-extern const char *subgetoptarg;
+extern char *subgetoptarg;
 extern int subgetoptind;
 extern int subgetoptpos;
 extern int subgetoptproblem;

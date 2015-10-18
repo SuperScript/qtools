@@ -12,7 +12,7 @@
 
 int optind = 1;
 int optpos = 0;
-const char *optarg = 0;
+char *optarg = 0;
 int optproblem = 0;
 int optdone = SUBGETOPTDONE;
 

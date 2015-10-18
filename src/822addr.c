@@ -4,10 +4,10 @@
 #include "mess822.h"
 #include "case.h"
 #include "stralloc.h"
-#include "exit.h"
 #include "alloc.h"
 #include "sgetopt.h"
 #include "str.h"
+#include <unistd.h>
 
 #define FATAL "822addr: fatal: "
 

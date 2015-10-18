@@ -1,3 +1,4 @@
-gcc -s
+cc -Wl,-s
+ld -s
 
 This will be used to link .o files into an executable.
